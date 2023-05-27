@@ -12,7 +12,7 @@ import {
 } from "@mantine/core";
 import { Carousel } from "@mantine/carousel";
 import { HeaderBar } from "@/components/Header/Header";
-import { IconArrowMerge, IconUser ,IconShieldLock} from "@tabler/icons-react";
+import { IconArrowMerge, IconUser, IconShieldLock } from "@tabler/icons-react";
 import { Footer } from "@/components/Footer/Footer";
 const mockdata = [
   {
@@ -166,6 +166,7 @@ export default function Home() {
             <Image
               src="/img1.jpg"
               alt="img1"
+              radius="md"
               onClick={(e) => {
                 e.stopPropagation();
               }}
@@ -181,6 +182,7 @@ export default function Home() {
               onClick={(e) => {
                 e.stopPropagation();
               }}
+              radius="md"
               width="100%"
               height={800}
             />
@@ -190,6 +192,7 @@ export default function Home() {
             <Image
               src="/img3.jpg"
               alt="img3"
+              radius="md"
               onClick={(e) => {
                 e.stopPropagation();
               }}

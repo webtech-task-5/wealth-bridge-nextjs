@@ -19,11 +19,20 @@ export default async function register(
         if (!isUser || isUser.password !== password) {
           return res.status(400).json({ error: "Wrong Email or Password" });
         }
+        const data = {
+          id: isUser._id,
+          name: isUser.name,
+          email: isUser.email,
+          isLoggedIn: true,
+          type: isUser.type,
+        };
         const sectetKey = process.env.JWT_SECRET as string;
-        const token = jwt.sign({ id: isUser._id }, sectetKey, {
+        const token = jwt.sign(data, sectetKey, {
           expiresIn: "1d",
         });
-        res.status(200).json({ message: "User created successfully" });
+        res
+          .status(200)
+          .json({ message: "User created successfully", token, data });
       } catch (error: any) {
         console.log(error);
         return res.status(500).json({ error: error.message });

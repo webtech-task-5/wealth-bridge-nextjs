@@ -24,11 +24,15 @@ function hello() {
     email: "",
     password: "",
   });
-  const registerUser = () => {
+  const loginUser = () => {
     if (user.email && user.password) {
       axios
         .post("/api/login", user)
         .then((res) => {
+          const {token,data} = res.data;
+          // save it to localstorage 
+          localStorage.setItem("token",token);
+          console.log(data);
           router.push("/dashboard");
         })
         .catch((err) => {
@@ -80,8 +84,8 @@ function hello() {
           }}
         />
 
-        <Button fullWidth mt="xl" onClick={registerUser}>
-          Sign in
+        <Button fullWidth mt="xl" onClick={loginUser}>
+          Login
         </Button>
       </Paper>
     </Container>
