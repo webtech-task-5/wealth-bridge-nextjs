@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import dbConnect from "@/libs/dbConnect";
 import User from "@/models/User";
+import { sendMail } from "@/utils/mail";
 export default async function register(
   req: NextApiRequest,
   res: NextApiResponse<any>
@@ -26,6 +27,13 @@ export default async function register(
           email,
           accountNumber,
         });
+        const mail = {
+          to: email,
+          subject: "Welcome to Wealth Bridge",
+          text: "Welcome to Wealth Bridge",
+          html: `<h1>Welcome to Wealth Bridge</h1><p>Your account number is ${accountNumber}</p>`,
+        };
+        await sendMail(email, mail);
         res.status(200).json({ message: "User created successfully", user });
       } catch (error: any) {
         console.log(error);

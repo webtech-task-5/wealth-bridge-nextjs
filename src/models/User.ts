@@ -1,5 +1,4 @@
-// make a mongoose model for the User collection in typescript and export it:
-// // /models/User.ts
+
 import mongoose from "mongoose";
 
 export type UserDocument = mongoose.Document & {

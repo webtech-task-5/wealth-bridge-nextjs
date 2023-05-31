@@ -10,7 +10,7 @@ import {
   SimpleGrid,
   Table,
 } from "@mantine/core";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { HeaderBar } from "@/components/Header/Header";
@@ -22,7 +22,8 @@ import {
   IconRepeat,
   IconCurrencyTaka,
 } from "@tabler/icons-react";
-
+import { DepositModal } from "@/components/DepositModal/DepositModal";
+import jwt from "jsonwebtoken";
 const mockdata = [
   {
     title: "Deposit Money",
@@ -110,12 +111,13 @@ let data = [
 
 function hello() {
   const router = useRouter();
+  const [opened, setOpened] = useState(false);
   const { classes, theme } = useStyles();
   const itemClick = (href: string) => {
     if (href == "/keys") {
       router.push(href);
-    } else {
-      console.log("hello");
+    } else if (href == "/deposit") {
+      setOpened(true);
     }
   };
   const items = mockdata.map((item) => (
@@ -132,6 +134,23 @@ function hello() {
       </Text>
     </UnstyledButton>
   ));
+  const [dashboardData, setData] = useState({} as any);
+  useEffect(() => {
+    const token = localStorage.getItem("token") as string;
+    if (!token) {
+      router.push("/login");
+    }
+    const id = jwt.decode(token) as any;
+    const getdashboard = async () => {
+      axios.defaults.headers.common["id"] = id.id;
+      await axios.get("/api/getdashboard").then((res) => {
+        console.log(res.data);
+        setData(res.data.data);
+      });
+    };
+    getdashboard();
+  }, []);
+
   return (
     <>
       <HeaderBar />
@@ -150,7 +169,7 @@ function hello() {
             {items}
           </SimpleGrid>
         </Card>
-        <WalletCard />
+        <WalletCard data={dashboardData} />
       </div>
       <div
         style={{
@@ -161,7 +180,7 @@ function hello() {
         <p style={{ fontSize: "2rem" }}>Transactions - </p>
         <TransactionTable data={data} />
       </div>
-
+      <DepositModal opened={opened} setOpened={setOpened} />
       <Footer />
     </>
   );

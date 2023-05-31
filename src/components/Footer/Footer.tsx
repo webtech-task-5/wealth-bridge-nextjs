@@ -1,4 +1,11 @@
-import { createStyles, Text, Group, ActionIcon, rem } from "@mantine/core";
+import {
+  createStyles,
+  Text,
+  Group,
+  ActionIcon,
+  rem,
+  Anchor,
+} from "@mantine/core";
 import {
   IconBrandTwitter,
   IconBrandYoutube,
@@ -38,15 +45,21 @@ export function Footer() {
           </Text>
         </Group>
 
-        <Group><Text fz="sm"> © All Rights Reserved To Owishiboo & Shikari</Text></Group>
+        <Group>
+          <Text fz="sm"> © All Rights Reserved To Owishiboo & Shikari</Text>
+        </Group>
 
         <Group spacing="xs" position="right" noWrap>
-          <ActionIcon size="lg" variant="default" radius="xl">
-            <IconBrandTwitter size="1.05rem" stroke={1.5} />
-          </ActionIcon>
-          <ActionIcon size="lg" variant="default" radius="xl">
-            <IconBrandYoutube size="1.05rem" stroke={1.5} />
-          </ActionIcon>
+          <Anchor>
+            <ActionIcon size="lg" variant="default" radius="xl">
+              <IconBrandTwitter size="1.05rem" stroke={1.5} />
+            </ActionIcon>
+          </Anchor>
+          <Anchor href="https://youtu.be/dQw4w9WgXcQ">
+            <ActionIcon size="lg" variant="default" radius="xl">
+              <IconBrandYoutube size="1.05rem" stroke={1.5} />
+            </ActionIcon>
+          </Anchor>
           <ActionIcon size="lg" variant="default" radius="xl">
             <IconBrandInstagram size="1.05rem" stroke={1.5} />
           </ActionIcon>
