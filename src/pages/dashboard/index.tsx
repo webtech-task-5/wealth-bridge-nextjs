@@ -71,43 +71,6 @@ const useStyles = createStyles((theme) => ({
     },
   },
 }));
-let data = [
-  {
-    id: "TX-153456",
-    time: "2021-08-01",
-    type: "deposit",
-    amount: 1000,
-    to: "WB-123456",
-  },
-  {
-    id: "TX-123476",
-    time: "2021-08-01",
-    type: "payment",
-    amount: 1000,
-    to: "WB-123456",
-  },
-  {
-    id: "TX-163456",
-    time: "2021-08-01",
-    type: "deposit",
-    amount: 1000,
-    to: "WB-123456",
-  },
-  {
-    id: "TX-223456",
-    time: "2021-08-01",
-    type: "withdraw",
-    amount: 1000,
-    to: "WB-123456",
-  },
-  {
-    id: "TX-123056",
-    time: "2021-08-01",
-    type: "payment",
-    amount: 1000,
-    to: "WB-123456",
-  },
-];
 
 function hello() {
   const router = useRouter();
@@ -117,6 +80,10 @@ function hello() {
     if (href == "/keys") {
       router.push(href);
     } else if (href == "/deposit") {
+      setModalType("deposit");
+      setOpened(true);
+    } else if (href == "/withdraw") {
+      setModalType("withdraw");
       setOpened(true);
     }
   };
@@ -134,7 +101,21 @@ function hello() {
       </Text>
     </UnstyledButton>
   ));
-  const [dashboardData, setData] = useState({} as any);
+  const [dashboardData, setData] = useState<{
+    balance: number;
+    accountNumber: string;
+    total: number;
+    depositCount: number;
+    paymentCount: number;
+  }>({
+    balance: 0,
+    accountNumber: "",
+    total: 0,
+    depositCount: 0,
+    paymentCount: 0,
+  });
+  const [transactions, setTransactions] = useState([] as any[]);
+  const [modalType, setModalType] = useState("deposit");
   useEffect(() => {
     const token = localStorage.getItem("token") as string;
     if (!token) {
@@ -146,6 +127,32 @@ function hello() {
       await axios.get("/api/getdashboard").then((res) => {
         console.log(res.data);
         setData(res.data.data);
+        let transactions = res.data.transactions;
+        let user = res.data.user;
+        let dashboardData: {
+          balance: number;
+          accountNumber: string;
+          total: number;
+          depositCount: number;
+          paymentCount: number;
+        } = {
+          balance: user.wallet,
+          accountNumber: user.accountNumber,
+          total: res.data.total,
+          depositCount: res.data.depositCount,
+          paymentCount: res.data.paymentCount,
+        };
+        setData(dashboardData);
+        transactions = transactions.map((item: any) => {
+          return {
+            id: item.tid,
+            time: item.createdAt,
+            type: item.type,
+            amount: item.amount,
+            to: item.recipient,
+          };
+        });
+        setTransactions(transactions);
       });
     };
     getdashboard();
@@ -169,7 +176,7 @@ function hello() {
             {items}
           </SimpleGrid>
         </Card>
-        <WalletCard data={dashboardData} />
+        <WalletCard dashboardData={dashboardData} />
       </div>
       <div
         style={{
@@ -178,9 +185,9 @@ function hello() {
         }}
       >
         <p style={{ fontSize: "2rem" }}>Transactions - </p>
-        <TransactionTable data={data} />
+        <TransactionTable data={transactions} />
       </div>
-      <DepositModal opened={opened} setOpened={setOpened} />
+      <DepositModal opened={opened} setOpened={setOpened} type={modalType} />
       <Footer />
     </>
   );

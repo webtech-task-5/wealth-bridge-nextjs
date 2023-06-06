@@ -48,18 +48,30 @@ const useStyles = createStyles((theme) => ({
     },
   },
 }));
-export function WalletCard() {
+export function WalletCard({
+  dashboardData,
+}: {
+  dashboardData: {
+    balance: number;
+    accountNumber: string;
+    total: number;
+    depositCount: number;
+    paymentCount: number;
+  };
+}) {
+  console.log({ dashboardData });
   const { classes, theme } = useStyles();
   const stats = [
     {
-      value: 447,
-      label: "Total payments",
-    },
-    {
-      value: 76,
+      value: dashboardData.depositCount,
       label: "Total deposits",
     },
+    {
+      value: dashboardData.paymentCount,
+      label: "Total payments",
+    },
   ];
+
   const items = stats.map((stat) => (
     <div key={stat.label}>
       <Text className={classes.label}>{stat.value}</Text>
@@ -73,11 +85,22 @@ export function WalletCard() {
       <div className={classes.inner}>
         <div>
           <Text fz="xl" className={classes.label}>
-            Your Wallet
+            Account No:{" "}
+            <span
+              style={{
+                fontFamily: `Greycliff CF, ${theme.fontFamily}`,
+                fontWeight: 500,
+                fontSize: rem(18),
+                lineHeight: 1,
+                color: "gray",
+              }}
+            >
+              {dashboardData.accountNumber}
+            </span>
           </Text>
           <div>
             <Text className={classes.lead} mt={30}>
-              1784
+              {dashboardData.total}
             </Text>
             <Text fz="xs" color="dimmed">
               Total Transaction
@@ -100,7 +123,7 @@ export function WalletCard() {
             label={
               <div>
                 <Text ta="center" fz="lg" className={classes.label}>
-                  150096 TK
+                  ৳ {dashboardData.balance}
                 </Text>
                 <Text ta="center" fz="xs" c="dimmed">
                   Total Balance

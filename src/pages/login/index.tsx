@@ -55,7 +55,7 @@ function hello() {
           fontWeight: 900,
         })}
       >
-        Hello From Wealth Bank
+        Hello From Wealth Bridge
       </Title>
       <Text color="dimmed" size="sm" align="center" mt={5}>
         Don't Have an Account?{" "}

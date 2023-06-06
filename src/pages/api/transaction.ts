@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import dbConnect from "@/libs/dbConnect";
 import Key from "@/models/User";
 import User from "@/models/User";
+import Transaction from "@/models/Transaction";
 export default async function register(
   req: NextApiRequest,
   res: NextApiResponse<any>
@@ -27,7 +28,13 @@ export default async function register(
         if (type === "deposit") {
           if (amount < 0)
             return res.status(400).json({ error: "Invalid amount" });
-          //  add transaction also
+          await Transaction.create({
+            sender_id: id,
+            recipient: "-",
+            amount,
+            type: "deposit",
+            tid: "TX-" + Date.now(),
+          });
           const newUser = await User.findByIdAndUpdate(
             id,
             {
@@ -45,7 +52,15 @@ export default async function register(
             return res.status(400).json({ error: "Invalid amount" });
           if (user.wallet < amount)
             return res.status(400).json({ error: "Insufficient Balance" });
-          //  add transaction also
+
+          await Transaction.create({
+            sender_id: id,
+            recipient: "-",
+            amount,
+            type: "withdraw",
+            tid: "TX-" + Date.now(),
+          });
+
           const newUser = await User.findByIdAndUpdate(
             id,
             {

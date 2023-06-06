@@ -46,13 +46,13 @@ export function TransactionTable({ data }: UsersTableProps) {
           {item.type.toUpperCase()}
         </Badge>
       </td>
-      <td>{item.amount} Tk</td>
+      <td>৳ {item.amount}</td>
       <td>
         <Text fz="sm" c="dimmed">
           {item.to}
         </Text>
       </td>
-      <td>{item.time}</td>
+      <td>{formatDate(item.time).date} | {formatDate(item.time).time}</td>
     </tr>
   ));
 
@@ -64,7 +64,7 @@ export function TransactionTable({ data }: UsersTableProps) {
             <th>Transaction ID</th>
             <th>Transaction Type</th>
             <th>Amount</th>
-            <th>To</th>
+            <th>Recipient</th>
             <th>Time</th>
             <th />
           </tr>
@@ -74,3 +74,14 @@ export function TransactionTable({ data }: UsersTableProps) {
     </ScrollArea>
   );
 }
+
+const formatDate = (d: string) => {
+  let date = d.split("T")[0];
+  date = date.split("-").reverse().join("-");
+  let time = d.split("T")[1];
+  time = time.split(".")[0];
+  return {
+    date,
+    time,
+  };
+};

@@ -7,9 +7,11 @@ import jwt from "jsonwebtoken";
 export function DepositModal({
   opened,
   setOpened,
+  type,
 }: {
   opened: boolean;
   setOpened: Function;
+  type: string;
 }) {
   const theme = useMantineTheme();
   const [value, setValue] = useState("");
@@ -21,7 +23,7 @@ export function DepositModal({
       await axios.post("/api/transaction", {
         id: token.id,
         amount: value,
-        type: "deposit",
+        type: type,
       });
       setOpened(false);
       window.location.reload();
@@ -30,11 +32,19 @@ export function DepositModal({
       setOpened(false);
     }
   };
+  const getTitle = (type: string) => {
+    if (type === "deposit") {
+      return "Deposit to Wealth Bridge";
+    } else {
+      return "Withdraw from Wealth Bridge";
+    }
+  };
+
   return (
     <Modal
       opened={opened}
       onClose={() => setOpened(false)}
-      title="Deposit Money : "
+      title={type === "deposit" ? "Deposit" : "Withdraw"}
       overlayProps={{
         color:
           theme.colorScheme === "dark"
@@ -47,7 +57,7 @@ export function DepositModal({
       <Input.Wrapper
         id="input-demo"
         withAsterisk
-        label="Deposit to Wealth Bridge:"
+        label={getTitle(type)}
         description="Please enter your desired amount."
       >
         <Input
@@ -58,8 +68,13 @@ export function DepositModal({
           }}
         />
       </Input.Wrapper>
-      <Button color="green" radius="md" mt="sm" onClick={onSubmit}>
-        Deposit
+      <Button
+        color={type == "deposit" ? "green" : "red"}
+        radius="md"
+        mt="sm"
+        onClick={onSubmit}
+      >
+        {type === "deposit" ? "Deposit" : "Withdraw"}
       </Button>
     </Modal>
   );
