@@ -9,14 +9,18 @@ import {
   Container,
   Button,
 } from "@mantine/core";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { HeaderBar } from "@/components/Header/Header";
 import { Footer } from "@/components/Footer/Footer";
 function hello() {
   const router = useRouter();
-
+  useEffect(() => {
+    if (localStorage.getItem("token") !== null) {
+      window.location.href = "/dashboard";
+    }
+  }, []);
   const [user, setUser] = useState({
     name: "",
     email: "",
@@ -39,7 +43,7 @@ function hello() {
 
   return (
     <>
-      <HeaderBar />
+      <HeaderBar login={true} logout={false} active="/register"/>
       <Container size={420} my={40}>
         <Title
           align="center"

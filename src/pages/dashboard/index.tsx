@@ -76,6 +76,11 @@ function hello() {
   const router = useRouter();
   const [opened, setOpened] = useState(false);
   const { classes, theme } = useStyles();
+  useEffect(() => {
+    if (localStorage.getItem("token") === null) {
+      window.location.href = "/";
+    }
+  }, []);
   const itemClick = (href: string) => {
     if (href == "/keys") {
       router.push(href);
@@ -160,7 +165,7 @@ function hello() {
 
   return (
     <>
-      <HeaderBar />
+      <HeaderBar login={false} logout={true} active=""/>
       <div
         style={{
           display: "flex",

@@ -12,6 +12,7 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconBuildingBank } from "@tabler/icons-react";
+import Link from "next/link";
 const HEADER_HEIGHT = rem(60);
 
 const useStyles = createStyles((theme) => ({
@@ -96,52 +97,94 @@ const useStyles = createStyles((theme) => ({
 interface HeaderResponsiveProps {
   links: { link: string; label: string }[];
 }
-const links = [
-  {
-    link: "/about",
-    label: "About",
-  },
-  {
-    link: "/login",
-    label: "Login",
-  },
-  {
-    link: "/register",
-    label: "Signup",
-  },
-  
-];
 
-export function HeaderBar() {
+export function HeaderBar({
+  login,
+  logout,
+  active,
+}: {
+  login: boolean;
+  logout: boolean;
+  active: string;
+}) {
   const [opened, { toggle, close }] = useDisclosure(false);
-  const [active, setActive] = useState(links[0].link);
-  const { classes, cx } = useStyles();
 
-  const items = links.map((link) => (
-    <a
-      key={link.label}
-      href={link.link}
-      className={cx(classes.link, {
-        [classes.linkActive]: active === link.link,
-      })}
-      onClick={(event) => {
-        setActive(link.link);
-        close();
-      }}
-    >
-      {link.label}
-    </a>
-  ));
+  const { classes, cx } = useStyles();
+  let links = [
+    {
+      link: "/about",
+      label: "About",
+    },
+  ];
+  if (login) {
+    links = [
+      ...links,
+      {
+        link: "/login",
+        label: "Login",
+      },
+      {
+        link: "/register",
+        label: "Signup",
+      },
+    ];
+  }
+  if (logout) {
+    links = [
+      ...links,
+      {
+        link: "/logout",
+        label: "Logout",
+      },
+    ];
+  }
+
+  const items = links.map((link) => {
+    if (link.label == "Logout") {
+      return (
+        <Link
+          onClick={() => {
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
+          }}
+          href={"/"}
+          key={link.label}
+          className={cx(
+            classes.link,
+            active === link.link && classes.linkActive
+          )}
+        >
+          {link.label}
+        </Link>
+      );
+    } else {
+      return (
+        <Link
+          href={link.link}
+          key={link.label}
+          className={cx(
+            classes.link,
+            active === link.link && classes.linkActive
+          )}
+          onClick={close}
+        >
+          {link.label}
+        </Link>
+      );
+    }
+  });
   return (
     <>
       <Header height={HEADER_HEIGHT} mb={120} className={classes.root}>
         <Container className={classes.header}>
-          <Group sx={{cursor:"pointer"}}>
-            <IconBuildingBank size={28} color="#228BE6" />
-            <Text fz="lg" fw={700}>
-              Wealth-Bridge
-            </Text>
-          </Group>
+          <Link href={"/dashboard"}>
+            <Group sx={{ cursor: "pointer" }}>
+              <IconBuildingBank size={28} color="#228BE6" />
+              <Text fz="lg" fw={700}>
+                Wealth-Bridge
+              </Text>
+            </Group>
+          </Link>
 
           <Group spacing={5} className={classes.links}>
             {items}

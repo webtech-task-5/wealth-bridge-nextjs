@@ -26,7 +26,7 @@ function hello() {
   useEffect(() => {
     const token = localStorage.getItem("token") as string;
     if (!token) {
-      router.push("/login");
+      router.push("/0");
     }
     const id = jwt.decode(token) as any;
     setKey({
@@ -59,7 +59,7 @@ function hello() {
   };
   return (
     <>
-      <HeaderBar />
+      <HeaderBar login={false} logout={true} active="" />
       <div style={{ marginLeft: "20%", marginTop: "-4%" }}>
         <Title order={1}>Create new API key : </Title>
         <Input
@@ -111,7 +111,10 @@ function hello() {
                 color="#d94330"
                 cursor="pointer"
                 onClick={() => {
-                  console.log("Fuck");
+                  axios.defaults.headers.common["id"] = item._id;
+                  axios.delete(`/api/key`).then((res) => {
+                    router.reload();
+                  });
                 }}
               />
             </div>

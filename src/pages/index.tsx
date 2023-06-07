@@ -14,6 +14,7 @@ import { Carousel } from "@mantine/carousel";
 import { HeaderBar } from "@/components/Header/Header";
 import { IconArrowMerge, IconUser, IconShieldLock } from "@tabler/icons-react";
 import { Footer } from "@/components/Footer/Footer";
+import { useEffect } from "react";
 const mockdata = [
   {
     title: "Security",
@@ -149,9 +150,15 @@ export default function Home() {
       </Text>
     </Card>
   ));
+  useEffect(() => {
+    if (localStorage.getItem("token") !== null) {
+      window.location.href = "/dashboard";
+    }
+  }, []);
+
   return (
     <>
-      <HeaderBar />
+      <HeaderBar login={true} logout={false} active="" />
       <div
         style={{ marginLeft: "5rem", marginRight: "5rem", marginTop: "-6rem" }}
       >

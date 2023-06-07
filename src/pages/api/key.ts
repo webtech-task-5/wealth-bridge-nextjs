@@ -38,6 +38,18 @@ export default async function register(
         return res.status(500).json({ error: error.message });
       }
       break;
+    case "DELETE":
+      try {
+        const id = req.headers.id as string;
+        if (!id) {
+          return res.status(400).json({ error: "Missing id" });
+        }
+        const data = await Key.findByIdAndDelete(id);
+        res.status(200).json({ message: "Key deleted successfully" });
+      } catch (error: any) {
+        console.log(error);
+        return res.status(500).json({ error: error.message });
+      }
     default:
       return res.status(405).json({ message: "Method not allowed" });
   }
