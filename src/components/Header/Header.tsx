@@ -177,10 +177,10 @@ export function HeaderBar({
     <>
       <Header height={HEADER_HEIGHT} mb={120} className={classes.root}>
         <Container className={classes.header}>
-          <Link href={"/dashboard"}>
+          <Link href={"/dashboard"} style={{textDecoration: "none"}}>
             <Group sx={{ cursor: "pointer" }}>
               <IconBuildingBank size={28} color="#228BE6" />
-              <Text fz="lg" fw={700}>
+              <Text fz="lg" fw={700} color="blue.7">
                 Wealth-Bridge
               </Text>
             </Group>
