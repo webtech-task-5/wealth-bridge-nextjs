@@ -130,7 +130,7 @@ function hello() {
     const getdashboard = async () => {
       axios.defaults.headers.common["id"] = id.id;
       await axios.get("/api/getdashboard").then((res) => {
-        console.log(res.data);
+        console.log({ res: res.data });
         setData(res.data.data);
         let transactions = res.data.transactions;
         let user = res.data.user;
@@ -165,7 +165,7 @@ function hello() {
 
   return (
     <>
-      <HeaderBar login={false} logout={true} active=""/>
+      <HeaderBar login={false} logout={true} active="" />
       <div
         style={{
           display: "flex",

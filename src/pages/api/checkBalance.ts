@@ -35,7 +35,7 @@ export default async function register(
           const sellerUser = await User.findOne({
             accountNumber: seller[i].sellerId,
           });
-          console.log(seller);
+          
           await Transaction.create({
             sender_id: bankAccount._id,
             recipient: sellerUser._id,

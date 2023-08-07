@@ -123,7 +123,7 @@ export function WalletCard({
             label={
               <div>
                 <Text ta="center" fz="lg" className={classes.label}>
-                  ৳ {dashboardData.balance}
+                  ৳{dashboardData.balance}
                 </Text>
                 <Text ta="center" fz="xs" c="dimmed">
                   Total Balance

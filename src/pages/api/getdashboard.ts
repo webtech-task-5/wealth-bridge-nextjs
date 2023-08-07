@@ -17,7 +17,9 @@ export default async function register(
         }
         const transactions = await Transaction.find({ sender_id: id });
         const recieved = await Transaction.find({ recipient: id });
+
         const all = [...transactions, ...recieved];
+
         all.sort((a, b) => {
           return b.createdAt.getTime() - a.createdAt.getTime();
         });
@@ -25,26 +27,23 @@ export default async function register(
         const depositCount = transactions.filter(
           (t) => t.type === "deposit"
         ).length;
-        const withdrawCount = transactions.filter(
-          (t) => t.type === "withdraw"
-        ).length;
-        const payoutCount = transactions.filter(
-          (t) => t.type === "payment"
-        ).length;
-        total = depositCount + withdrawCount + payoutCount;
+
+        const payoutCount = all.filter((t) => t.type === "payment").length;
+        console.log({ transactions, recieved, all });
+
+        total = all.length;
+
         const user = await User.findById(id);
         if (!user) {
           return res.status(400).json({ error: "User not found" });
         }
-        return res
-          .status(200)
-          .json({
-            transactions: all,
-            user,
-            total,
-            depositCount,
-            paymentCount: payoutCount,
-          });
+        return res.status(200).json({
+          transactions: all,
+          user,
+          total,
+          depositCount,
+          paymentCount: payoutCount,
+        });
       } catch (error: any) {
         console.log(error);
         return res.status(500).json({ error: error.message });
